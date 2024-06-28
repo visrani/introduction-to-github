@@ -22,8 +22,8 @@ jobs:
     - name: Check for changes in restricted directory
       run: |
         if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "^${{ env.RESTRICTED_PATH }}"; then
-          echo "No changes in restricted-directory detected."
-        else
           echo "Error: Changes in restricted-directory are not allowed."
           exit 1
+        else
+          echo "No changes in restricted-directory detected."
         fi
