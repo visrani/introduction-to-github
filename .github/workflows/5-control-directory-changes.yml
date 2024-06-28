@@ -16,9 +16,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Set directory path
+      run: echo "RESTRICTED_PATH=restricted/touch-me-not" >> $GITHUB_ENV
+
     - name: Check for changes in restricted directory
       run: |
-        if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^restricted-directory/'; then
+        if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep "^${{ env.RESTRICTED_PATH }}"; then
           echo "Error: Changes in restricted-directory are not allowed."
           exit 1
         fi
