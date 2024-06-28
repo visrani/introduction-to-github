@@ -1,12 +1,7 @@
 name: Protect Directory
 
 on:
-  push:
-    paths:
-      - 'restricted/touch-me-not'  # Trigger on any file changes
   pull_request:
-    paths:
-      - 'restricted/touch-me-not'  # Trigger on any pull request
 
 jobs:
   protect-directory:
@@ -21,7 +16,8 @@ jobs:
 
     - name: Check for changes in restricted directory
       run: |
-        if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep "^${{ env.RESTRICTED_PATH }}"; then
+        git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep "^${{ env.RESTRICTED_PATH }}"
+        if [ $? -eq 0 ]; then
           echo "Error: Changes in restricted-directory are not allowed."
           exit 1
         fi
