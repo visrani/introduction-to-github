@@ -1,9 +1,6 @@
 name: Protect Directory
 
 on:
-  push:
-    paths:
-      - 'restricted/touch-me-not'  # Trigger on any file changes
   pull_request:
     paths:
       - 'restricted/touch-me-not'  # Trigger on any pull request
