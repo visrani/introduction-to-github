@@ -1,6 +1,9 @@
 name: Protect Directory
 
 on:
+  push:
+    paths:
+      - 'restricted/touch-me-not'  # Trigger on any file changes
   pull_request:
     paths:
       - 'restricted/touch-me-not'  # Trigger on any pull request
@@ -18,9 +21,22 @@ jobs:
 
     - name: Check for changes in restricted directory
       run: |
+        echo "Before SHA: ${{ github.event.before }}"
+        echo "Current SHA: ${{ github.sha }}"
+        echo "Restricted Path: ${{ env.RESTRICTED_PATH }}"
         if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q "^${{ env.RESTRICTED_PATH }}"; then
+          echo "Error: Changes in restricted-directory are not allowed."
+          echo "Changes Detected but lets move ahead"
+        else
+          echo "No changes in restricted-directory detected."
+        fi
+        echo "------------------------------------------------"
+        echo "Base Branch: ${{ github.base_ref }}"
+        echo "Head Branch: ${{ github.head_ref }}"
+        echo "Restricted Path: ${{ env.RESTRICTED_PATH }}"
+        if git diff --name-only ${{ github.base_ref }} ${{ github.head_ref }} | grep -q "^${{ env.RESTRICTED_PATH }}"; then
           echo "Error: Changes in restricted-directory are not allowed."
           exit 1
         else
-          echo "No changes in restricted-directory detected."
+          echo "No changes in restricted-directory detected 2."
         fi
