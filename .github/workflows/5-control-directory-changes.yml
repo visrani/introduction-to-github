@@ -41,7 +41,7 @@ jobs:
         echo "Base Branch: ${{ github.base_ref }}"
         echo "Head Branch: ${{ github.head_ref }}"
         echo "Restricted Path: ${{ env.RESTRICTED_PATH }}"
-        if git diff --name-only origin/master HEAD | grep -q "^${{ env.RESTRICTED_PATH }}"; then
+        if git diff --name-only origin/main HEAD | grep -q "^${{ env.RESTRICTED_PATH }}"; then
           echo "Error: Changes in restricted-directory are not allowed."
           exit 1
         else
